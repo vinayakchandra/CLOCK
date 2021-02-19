@@ -10,7 +10,6 @@ import pyttsx3
 
 class Clock:
     """Color for the background"""
-    # color = "#1E1E1E"
     color = "black"
 
     time_format = ' %I : %M : %S   %p '
