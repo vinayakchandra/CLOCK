@@ -5,67 +5,54 @@ import tkinter.messagebox
 import quotesCollection as qc
 import os
 import pyttsx3
-# from Speaker import Speaker
 
 
 class Clock:
-    """Color for the background"""
-    color = "black"
+    color = "black"  # color for the background
+    time_format = ' %I : %M : %S   %p '  # format of the time -> 12 hour format
+    checking = False  # for changing time format
+    startTime = strftime("%I : %M : %S")  # time when Program is started
+    start_minutes = int(strftime(" %M"))  # minute time
+    start_hours = int(strftime("%H"))  # hour time
+    spent_minutes = int
+    spent_hours = int
+    font_style = ("Courier", 30, "bold")  # font style for Quote label and Date label
 
-    time_format = ' %I : %M : %S   %p '
-    checking = False
-    spent_minutes: int
-    spent_hours: int
-    start_minutes = int(strftime(" %M"))
-    start_hours = int(strftime("%H"))
-    starttime = strftime("%I : %M : %S")
-
-    def __init__(self):  # , window):
+    def __init__(self):
         self.root = Tk()
-        # self.sp = Speaker()
         self.engine = pyttsx3.init()
-        # self.root = window
-
         self.quotes = qc.QuotesCollection()
 
-        # self.root = Tk()
-        self.root.configure(bg=self.color)
-        # self.root.geometry("650x360")
+        self.root.configure(bg=self.color)  # background of window
+        # self.root.geometry("650x360")  # size of the window
 
-        self.root.title("CLOCK")  # title
+        self.root.title("CLOCK")  # Title
 
         # Time Label
         self.label = Label(self.root, font=("times", 80, "bold"), background="yellow", foreground="black", bd=1,
-                           relief="solid",
-                           padx=10)
+                           relief="solid", padx=10)
         self.label.pack(anchor="center", fill=X)
 
-        # calling time function
-        self.time()
+        self.time()  # calling time Method
 
         # date Label
-        self.date_label = Label(self.root, font=("Courier", 30, "bold"), fg="white", text=strftime("%d %B %Y %a"),
-                                bg=self.color,
-                                pady=10)
+        self.date_label = Label(self.root, font=self.font_style, fg="white", text=strftime("%d %B %Y %a"),
+                                bg=self.color, pady=10)
         self.date_label.pack()
 
         # quote label
         self.quoteLabel = Label(self.root, text=self.quotes.getQuote(), highlightbackground=self.color,
-                                font=("Courier", 30, "bold"), bg=self.color, fg="white",
+                                font=self.font_style, bg=self.color, fg="white",
                                 padx=20, pady=20, wraplength=1000)
         self.quoteLabel.pack()
-        # calling changingQuote Function to change the quote label every 5 secs
-        self.changingQuote()
 
-        # Quote Button
-        # self.quoteButton = Button(self.root, text="Quote", command=self.changingQuote)
-        # self.quoteButton.pack()
+        self.changingQuote()  # calling changingQuote Method to change the quote label every 30 minutes
 
-        # 12 24 hour format button ✅
+        # 12 24 hour format button
         self.button = Button(self.root, text="12/24", highlightbackground=self.color, command=self.change_time)
         self.button.pack()
 
-        # start time Button ✅
+        # start time Button
         self.start_button = Button(self.root, text="START", highlightbackground=self.color, command=self.start_time)
         self.start_button.pack()
 
@@ -75,7 +62,7 @@ class Clock:
         self.end_button.pack()
 
         # start time label
-        start_label_text = "You started at: {}".format(self.starttime)
+        start_label_text = "You started at: {}".format(self.startTime)
         self.start_label = Label(self.root, text=start_label_text, bg=self.color, fg="white", pady=10)
         self.start_label.pack()
 
@@ -84,24 +71,17 @@ class Clock:
                                   command=self.time_spent)
         self.time_button.pack()
 
-        # EXIT button ✅
+        # EXIT button
         self.exit_button = Button(self.root, text="EXIT", font=("times", 20, "bold",), fg='red',
-                                  highlightbackground=self.color,
-                                  command=self.pop_exit)
+                                  highlightbackground=self.color, command=self.pop_exit)
         self.exit_button.pack()
 
-        """Transparent window"""
-        self.root.attributes('-alpha', .9)
+        self.root.attributes('-alpha', .9)  # Transparent window
 
-        # self.engine.say("Program started")
-        # self.engine.runAndWait()
-        os.system("say Program Started")
-        # self.say("time is " + str(strftime("%I %M")))
-        os.system("say time is " + str(strftime("%I %M")))
-        # self.sp.say("Program Started")
+        self.speak("Program Started")
+        self.speak("time is " + str(strftime("%I %M")))
 
-        # mainloop
-        self.root.mainloop()
+        self.root.mainloop()  # mainloop
 
     # changing time on the label
     def time(self):
@@ -144,7 +124,7 @@ class Clock:
         current_time2 = strftime(' %H : %M %S ')
 
         # time spent pop-up
-        time_spent_popup = tkinter.messagebox.showinfo('Popup Window(Title)', total_spent_time)
+        tkinter.messagebox.showinfo('Popup Window(Title)', total_spent_time)
         print('printed the total time spent')
 
     # starting time
@@ -153,27 +133,23 @@ class Clock:
         self.start_hours = int(strftime('%H'))
         self.start_minutes = int(strftime('%M'))
 
-    # changing quote in quote label in every 30 mins (1800000 = 30 mins)
-    # saying the time in every 30 minutes
+    # changing quote in quote label in every 30 minutes and saying time
     def changingQuote(self):
         if int(strftime("%M")) == 30 or int(strftime("%M")) == 0:
             if int(strftime("%S")) == 0:
                 quoteText = self.quotes.getQuote()
                 self.quoteLabel.config(text=quoteText)
-                # self.say("time is " + str(strftime("%I %M")))
-                os.system("say time is " + str(strftime("%I %M")))
+                self.speak("time is " + str(strftime("%I %M")))
                 print("changed quoteText at " + strftime("%I : %M %p") + "\n")
 
+    # for cross platform
     def say(self, text):
         self.engine.say(text)
         self.engine.runAndWait()
 
-
-def main():
-    # root = Tk()
-    # Clock(root)
-    Clock()
-    # root.mainloop()
+    @staticmethod  # only works for Mac os
+    def speak(text):  # Speaking the text given to it
+        os.system("say {}".format(text))
 
 
 if __name__ == "__main__":
