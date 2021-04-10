@@ -3,7 +3,7 @@ import random
 
 
 class QuotesCollection:
-    location = "quotes.json"
+    location = "/Users/vinayak/IdeaProjects/CLOCK/src/quotes.json"
 
     def __init__(self):
         self.jsonData = json.load(open(self.location, "r"))
@@ -12,7 +12,3 @@ class QuotesCollection:
         quotes_ = self.jsonData['quotes']
         quoteNo = random.randint(0, (len(quotes_) - 1))
         return quotes_[quoteNo]['quote']
-
-# if __name__ == "__main__":
-#     readFile = ReadFile()
-#     readFile.getQuotes()

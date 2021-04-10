@@ -1,10 +1,12 @@
 # import all the libraries
-from tkinter import *
-from time import *
-import tkinter.messagebox
-import quotesCollection as qc
-import os
-import pyttsx3
+from tkinter import *  # To make the GUI
+from time import *  # To get the time
+import tkinter.messagebox  # To display pop up
+import quotesCollection as qc  # To get the quotes
+import os  # to use os.system() and speak the time
+import pyttsx3  # text to speech
+
+"""SPEAK FUNCTIONALITY ONLY WORKS FOR MAC"""
 
 
 class Clock:
@@ -12,8 +14,8 @@ class Clock:
     time_format = ' %I : %M : %S   %p '  # format of the time -> 12 hour format
     checking = False  # for changing time format
     startTime = strftime("%I : %M : %S")  # time when Program is started
-    start_minutes = int(strftime(" %M"))  # minute time
-    start_hours = int(strftime("%H"))  # hour time
+    start_minutes = int(strftime(" %M"))  # starting minute time
+    start_hours = int(strftime("%H"))  # starting hour time
     spent_minutes = int
     spent_hours = int
     font_style = ("Courier", 30, "bold")  # font style for Quote label and Date label
@@ -43,7 +45,7 @@ class Clock:
         # quote label
         self.quoteLabel = Label(self.root, text=self.quotes.getQuote(), highlightbackground=self.color,
                                 font=self.font_style, bg=self.color, fg="white",
-                                padx=20, pady=20, wraplength=1000)
+                                padx=20, pady=20, wraplength=900)
         self.quoteLabel.pack()
 
         self.changingQuote()  # calling changingQuote Method to change the quote label every 30 minutes
@@ -78,8 +80,9 @@ class Clock:
 
         self.root.attributes('-alpha', .9)  # Transparent window
 
-        self.speak("Program Started")
-        self.speak("time is " + str(strftime("%I %M")))
+        self.speak("Program Started")  # speaks Program Started
+        time_text = str(strftime("%I %M"))
+        self.speak("time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
 
         self.root.mainloop()  # mainloop
 
@@ -139,22 +142,24 @@ class Clock:
             if int(strftime("%S")) == 0:
                 quoteText = self.quotes.getQuote()
                 self.quoteLabel.config(text=quoteText)
-                self.speak("time is " + str(strftime("%I %M")))
-                print("changed quoteText at " + strftime("%I : %M %p") + "\n")
+                time_text = str(strftime("%I %M"))
+                self.speak(
+                    "time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
+                # print("changed quoteText at " + strftime("%I : %M %p") + "\n")
 
-    # for cross platform
+    # for cross platform.  -> HAVING PROBLEMS IN THIS
     def say(self, text):
         self.engine.say(text)
         self.engine.runAndWait()
 
-    @staticmethod  # only works for Mac os
+    @staticmethod  # only works in Mac os
     def speak(text):  # Speaking the text given to it
+        print(text)
         os.system("say {}".format(text))
 
 
 if __name__ == "__main__":
     print("Program started at " + strftime("%I-%M-%S  %p") + "\n")
-    main()
-    # sp = Speaker()
-    # sp.say("test")
-    # os.system("say isudhfuasfd")
+    Clock().speak("Have a great day ahead!")  # speaks when the program gets Exited
+
+    ''' if in WINDOWS -> Don't use speak() '''
