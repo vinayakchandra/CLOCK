@@ -80,7 +80,7 @@ class Clock:
 
         self.root.attributes('-alpha', .9)  # Transparent window
 
-        self.speak("Program Started")  # speaks Program Started
+        self.speak("CLOCK Started")  # speaks Program Started
         time_text = str(strftime("%I %M"))
         self.speak("time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
 
