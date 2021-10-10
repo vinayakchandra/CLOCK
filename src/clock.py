@@ -157,8 +157,8 @@ class Clock:
 
     # for cross platform.  -> HAVING PROBLEMS IN THIS
     def say(self, text):
-        self.engine.say(text)
-        self.engine.runAndWait()
+        # self.engine.say(text)
+        # self.engine.runAndWait()
         print(f"sed laif :(, I cannot say {text}")
 
     @staticmethod  # only works in Mac os
