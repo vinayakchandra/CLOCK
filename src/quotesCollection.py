@@ -6,7 +6,7 @@ class QuotesCollection:
     location = "quotes.json"
 
     def __init__(self):
-        self.jsonData = json.load(open(self.location, "r"))
+        self.jsonData = json.load(open(self.location, "r", encoding='utf-8'))
 
     def getQuote(self):  # Gives random quotes
         quotes_ = self.jsonData['quotes']
