@@ -4,7 +4,7 @@ from time import *  # To get the time
 import tkinter.messagebox  # To display pop up
 import quotesCollection as qc  # To get the quotes
 import os  # to use os.system() and speak the time
-import pyttsx3  # text to speech, pip install pyttsx3
+# import pyttsx3  # text to speech, pip install pyttsx3
 import platform  # to get OS name
 
 """SPEAK FUNCTIONALITY ONLY WORKS FOR MAC"""
@@ -23,7 +23,7 @@ class Clock:
 
     def __init__(self):
         self.root = Tk()
-        self.engine = pyttsx3.init()
+        # self.engine = pyttsx3.init()
         self.quotes = qc.QuotesCollection()
 
         self.root.configure(bg=self.color)  # background of window
