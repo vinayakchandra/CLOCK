@@ -4,7 +4,8 @@ from time import *  # To get the time
 import tkinter.messagebox  # To display pop up
 import quotesCollection as qc  # To get the quotes
 import os  # to use os.system() and speak the time
-import pyttsx3  # text to speech
+import pyttsx3  # text to speech, pip install pyttsx3
+import platform  # to get OS name
 
 """SPEAK FUNCTIONALITY ONLY WORKS FOR MAC"""
 
@@ -73,6 +74,10 @@ class Clock:
                                   command=self.time_spent)
         self.time_button.pack()
 
+        # changing quote button
+        self.quote_button = Button(self.root, highlightbackground=self.color, text="Quote", command=self.directQuoteChange)
+        self.quote_button.pack()
+
         # EXIT button
         self.exit_button = Button(self.root, text="EXIT", font=("times", 20, "bold",), fg='red',
                                   highlightbackground=self.color, command=self.pop_exit)
@@ -80,9 +85,9 @@ class Clock:
 
         self.root.attributes('-alpha', .9)  # Transparent window
 
-        self.speak("CLOCK Started")  # speaks Program Started
+        self.checkOS("CLOCK Started")  # speaks Program Started
         time_text = str(strftime("%I %M"))
-        self.speak("time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
+        self.checkOS("time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
 
         self.root.mainloop()  # mainloop
 
@@ -140,26 +145,42 @@ class Clock:
     def changingQuote(self):
         if int(strftime("%M")) == 30 or int(strftime("%M")) == 0:
             if int(strftime("%S")) == 0:
-                quoteText = self.quotes.getQuote()
-                self.quoteLabel.config(text=quoteText)
-                time_text = str(strftime("%I %M"))
-                self.speak(
-                    "time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
+                self.directQuoteChange()
+                self.checkOS(
+                    "time is " + ("00" in self.time_text and self.time_text.strip("0") + "o clock" or self.time_text.lstrip("0")))
+                # quoteText = self.quotes.getQuote()
+                # self.quoteLabel.config(text=quoteText)
+                # time_text = str(strftime("%I %M"))
+                # self.speak(
+                #     "time is " + ("00" in time_text and time_text.strip("0") + "o clock" or time_text.lstrip("0")))
                 # print("changed quoteText at " + strftime("%I : %M %p") + "\n")
 
     # for cross platform.  -> HAVING PROBLEMS IN THIS
     def say(self, text):
         self.engine.say(text)
         self.engine.runAndWait()
+        print(f"sed laif :(, I cannot say {text}")
 
     @staticmethod  # only works in Mac os
     def speak(text):  # Speaking the text given to it
         print(text)
         os.system("say {}".format(text))
 
+    def directQuoteChange(self):
+        quoteText = self.quotes.getQuote()
+        self.quoteLabel.config(text=quoteText)
+        self.time_text = str(strftime("%I %M"))
+        # print("changed quoteText at " + strftime("%I : %M %p") + "\n")
+
+    def checkOS(self, text):
+        if "mac" in platform.platform():
+            self.speak(text)
+        else:
+            self.say(text)
+
 
 if __name__ == "__main__":
     print("Program started at " + strftime("%I-%M-%S  %p") + "\n")
-    Clock().speak("Have a great day ahead!")  # speaks when the program gets Exited
+    Clock().checkOS("Have a great day ahead!")  # speaks when the program gets Exited
 
     ''' if in WINDOWS -> Don't use speak() '''
