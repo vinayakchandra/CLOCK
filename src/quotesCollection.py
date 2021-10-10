@@ -3,7 +3,7 @@ import random
 
 
 class QuotesCollection:
-    location = "/Users/vinayak/IdeaProjects/CLOCK/src/quotes.json"
+    location = "quotes.json"
 
     def __init__(self):
         self.jsonData = json.load(open(self.location, "r"))
